@@ -1,9 +1,10 @@
 import { Layout, Menu } from "antd";
-import Lab1 from "./pages/Lab1";
+import UserTable from "./UserTable";
+import RegisterForm from "./RegisterForm";
 
 const {Header, Sider, Content} = Layout;
 
-export default function App(){
+export default function Lab1 (){
     return (
         <Layout style={{minHeight:"100vh"}}>
             <Sider>
@@ -20,7 +21,8 @@ export default function App(){
                     Dashboard
                 </Header>
                 <Content style={{padding: 20}}>
-                    <Lab1 />
+                    <RegisterForm />
+                    <UserTable />
                 </Content>
             </Layout>
         </Layout>
