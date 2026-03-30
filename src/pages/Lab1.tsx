@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
-import UserTable from "./UserTable";
-import RegisterForm from "./RegisterForm";
+import UserTable from "../UserTable";
+import RegisterForm from "../RegisterForm";
 
 const {Header, Sider, Content} = Layout;
 

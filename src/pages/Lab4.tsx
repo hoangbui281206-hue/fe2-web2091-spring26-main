@@ -1,83 +1,47 @@
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { useMutation } from "@tanstack/react-query";
+import { Button, Form, Input } from "antd";
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
 
 interface Story {
-  id?: number;
-  title: string;
-  description?: string;
-  active: boolean;
-  categoryId?: number;
+    title: string;
+    author: string;
+    description: string;
+    date: string;
 }
 
-const AddStory = () => {
-  const [form] = Form.useForm();
+const AddCategory = () => {
+    const mutation = useMutation({
+        mutationFn: (data: Story) =>
+            axios.post("http://localhost:3000/stories", data),
+    });
 
-  // GET categories
-  const getCategories = async () => {
-    const { data } = await axios.get("http://localhost:3000/categories");
-    return data;
-  };
+    const onFinish = (values: Story) => {
+        mutation.mutate(values);
+    };
 
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+    return (
+        <Form onFinish={onFinish}>
+            <Form.Item label="tên truyện" name="title" rules={[{ required: true }]}>
+                <Input />
+            </Form.Item>
 
-  // POST category
-  const mutation = useMutation({
-    mutationFn: async (values: Story) => {
-      return await axios.post("http://localhost:3000/categories", values);
-    },
-    onSuccess: () => {
-      alert("Thêm thành công");
-      form.resetFields();
-    },
-  });
+            <Form.Item label="tác giả" name="author" rules={[{ required: true }]}>
+                <Input />
+            </Form.Item>
 
-  const onFinish = (values: Story) => {
-    mutation.mutate(values);
-  };
+            <Form.Item label="ngày" name="date" rules={[{ required: true }]}>
+                <Input type="date" />
+            </Form.Item>
 
-  return (
-    <Form form={form} layout="vertical" onFinish={onFinish}>
-      
-      <Form.Item
-        label="Title"
-        name="title"
-        rules={[{ required: true, message: "Title không được để trống" }]}
-      >
-        <Input />
-      </Form.Item>
+            <Form.Item label="mô tả" name="description">
+                <Input.TextArea />
+            </Form.Item>
 
-      <Form.Item label="Description" name="description">
-        <Input.TextArea rows={4} />
-      </Form.Item>
-
-      <Form.Item name="active" valuePropName="checked">
-        <Checkbox>Active</Checkbox>
-      </Form.Item>
-
-      <Form.Item label="Category" name="categoryId">
-        <Select
-          placeholder="Chọn danh mục"
-          options={categories?.map((item: any) => ({
-            label: item.title,
-            value: item.id,
-          }))}
-        />
-      </Form.Item>
-
-      <Button
-        type="primary"
-        htmlType="submit"
-        loading={mutation.isPending}
-      >
-        Submit
-      </Button>
-
-    </Form>
-  );
+            <Button type="primary" htmlType="submit" loading={mutation.isPending}>
+                Submit
+            </Button>
+        </Form>
+    );
 };
 
-export default AddStory;
+export default AddCategory;

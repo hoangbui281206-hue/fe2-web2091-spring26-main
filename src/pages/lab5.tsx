@@ -66,7 +66,7 @@ const StoryList = () => {
 
     if (isError) return <p>Lỗi khi tải dữ liệu</p>;
 
-    return <Table columns={columns} dataSource={data} />;
+    return <Table columns={columns} dataSource={data}  rowKey="id"/>;
 };
 
 export default StoryList;
